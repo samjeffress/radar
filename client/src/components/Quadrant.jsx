@@ -1,61 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ScatterplotChart } from 'react-easy-chart';
+import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import RadarItem from './RadarItem';
 import {quadrants} from '../constants';
-
-const bigData = [
-  {
-    type: 'One',
-    x: 1,
-    y: 5
-  },
-  {
-    type: 'Two',
-    x: 3,
-    y: 1
-  },
-  {
-    type: 'Three',
-    x: 0,
-    y: 6
-  },
-  {
-    type: 'Four',
-    x: 5,
-    y: 2
-  },
-  {
-    type: 'Five',
-    x: 4,
-    y: 4
-  },
-  {
-    type: 'Six',
-    x: 5,
-    y: 9
-  },
-  {
-    type: 'Seven',
-    x: 9,
-    y: 1
-  },
-  {
-    type: 'Eight',
-    x: 5,
-    y: 6
-  },
-  {
-    type: 'Nine',
-    x: 3,
-    y: 9
-  },
-  {
-    type: 'Ten',
-    x: 7,
-    y: 9
-  }
-];
 
 const config = [
   {
@@ -81,12 +29,40 @@ const config = [
 ];
 
 class Quadrant extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      popoverOpen: false
+    };
+    this.mouseOverHandler = this.mouseOverHandler.bind(this);
+    this.toggle = this.toggle.bind(this);
+  }
+
+
+  mouseOverHandler(d, e) {
+    console.log('d', d)
+    console.log('e', e)
+    console.log('target', e.target)
+    this.setState({
+      popoverOpen: true,
+      popoverTitle: d.name,
+      popoverElement: e.toElement,
+      popoverBody: `${d.quadrant} - ${d.name}`,
+      top: `${e.screenY - 10}px`,
+      left: `${e.screenX + 10}px`,
+      y: d.y,
+      x: d.x
+    });
+  }
+
+  toggle() {
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
+  }
+
   render() {
     const { name, items } = this.props;
-    const chartSeries = [{
-      field: 'id'
-    }]
-console.log('items', items)
     return (
       <div className={`Quadrant${name}`}>
         <h4>{name}</h4>
@@ -97,7 +73,20 @@ console.log('items', items)
           dotRadius={20}
           width={400}
           height={200}
+          mouseOverHandler={this.mouseOverHandler}
         />
+        <Popover 
+          placement="bottom" 
+          isOpen={this.state.popoverOpen} 
+          target={this.state.popoverElement} 
+          toggle={this.toggle}
+        >
+          <PopoverHeader>{this.state.popoverTitle}</PopoverHeader>
+          <PopoverBody>
+            {this.state.popoverBody}
+          </PopoverBody>
+        </Popover>
+
       </div>
     );
   }
@@ -109,3 +98,5 @@ Quadrant.propTypes = {
 }
 
 export default Quadrant;
+
+
