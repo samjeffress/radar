@@ -51,7 +51,8 @@ class Quadrant extends Component {
       top: `${e.screenY - 10}px`,
       left: `${e.screenX + 10}px`,
       y: d.y,
-      x: d.x
+      x: d.x,
+      item: d
     });
   }
 
@@ -62,7 +63,7 @@ class Quadrant extends Component {
   }
 
   render() {
-    const { name, items } = this.props;
+    const { name, items, updateItem } = this.props;
     return (
       <div className={`Quadrant${name}`}>
         <h4>{name}</h4>
@@ -75,7 +76,7 @@ class Quadrant extends Component {
           height={200}
           mouseOverHandler={this.mouseOverHandler}
         />
-        <Popover 
+        {this.state.popoverTitle && (<Popover 
           placement="bottom" 
           isOpen={this.state.popoverOpen} 
           target={this.state.popoverElement} 
@@ -83,9 +84,9 @@ class Quadrant extends Component {
         >
           <PopoverHeader>{this.state.popoverTitle}</PopoverHeader>
           <PopoverBody>
-            {this.state.popoverBody}
+            <RadarItem updateItem={updateItem} {...this.state.item} />
           </PopoverBody>
-        </Popover>
+        </Popover>)}
 
       </div>
     );
@@ -94,7 +95,8 @@ class Quadrant extends Component {
 
 Quadrant.propTypes = {
   name: PropTypes.string.isRequired,
-  items: PropTypes.array
+  items: PropTypes.array,
+  updateItem: PropTypes.func
 }
 
 export default Quadrant;

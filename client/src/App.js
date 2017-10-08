@@ -4,7 +4,9 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  state = { radar: [] }
+  state = { 
+    radar: []
+  };
 
   componentDidMount() {
     this.getCurrentRadar();
@@ -17,6 +19,18 @@ class App extends Component {
       .then(radar => this.setState({ radar }));
   }
 
+  updateItem = (itemId, ring, date, reason) => {
+    const body = { ring, date, reason };
+    fetch(`/api/radar/${itemId}`, {
+      method: "PUT",
+      headers: {'Content-Type':'application/json'}, 
+      body: JSON.stringify(body)
+    })
+    .then(res => fetch('/api/radar'))
+    .then(res => res.json())
+    .then(radar => this.setState({ radar }))
+    .catch(e => console.log(e))
+  }
 
   render() {
     const { radar } = this.state;
@@ -31,7 +45,7 @@ class App extends Component {
           To get started, edit <code>your Radar</code> and save to reload.
         </p>
         
-        {radar.length ? <Radar items={radar} /> : <p>probably should add some data</p>}
+        {radar.length ? <Radar items={radar} updateItem={this.updateItem} /> : <p>probably should add some data</p>}
       </div>
     );
   }

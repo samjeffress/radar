@@ -1,19 +1,42 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+const initialRadar = [
+  {id: 1, x: 3, y: 3, z: 100, type: 'tools', quadrant: 'tools', name: 'thing', positions: [
+    { id: 1, ring: 'adopt', updatedAt: new Date(), reason: 'kitten are excellent' },
+    { id: 2, ring: 'bin', updatedAt: new Date(), reason: 'dont like kittens so much now' }
+  ]},
+  {id: 2, x: 4, y: 4, z: 300, type: 'languages', quadrant: 'languages', name: 'cats', positions: [
+    { id: 1, ring: 'adopt', updatedAt: new Date(), reason: 'abc' },
+    { id: 2, ring: 'bin', updatedAt: new Date(), reason: 'def' }
+  ]},
+  {id: 3, x: 5, y: 5, z: 900, type: 'process', quadrant: 'process', name: 'talking', positions: [
+    { id: 1, ring: 'adopt', updatedAt: new Date(), reason: 'xyz' },
+    { id: 2, ring: 'bin', updatedAt: new Date(), reason: 'thtiht' }
+  ]},
+]
 
+app.use(bodyParser.json());// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
 // Put all API endpoints under '/api'
 app.get('/api/radar', (req, res) => {
-  res.json([
-    {id: 1, x: 3, y: 3, z: 100, type: 'tools', quadrant: 'tools', name: 'thing', ring: 'adopt', updatedAt: Date()},
-    {id: 2, x: 4, y: 4, z: 300, type: 'languages', quadrant: 'languages', name: 'cats', ring: 'trash', updatedAt: Date()},
-    {id: 3, x: 5, y: 5, z: 900, type: 'process', quadrant: 'process', name: 'talking', ring: 'adopt', updatedAt: Date()},
-  ]);
+  res.json(initialRadar);
 });
+
+app.put('/api/radar/:id', (req, res) => {
+  const id = req.params.id;
+  console.log('body', req.body)
+  const foundRadar = initialRadar.filter(r => r.id == id)
+  console.log('foundRadar', foundRadar)
+  if (foundRadar.length > 0) {
+    foundRadar[0].positions.push({ring: req.body.ring, date: req.body.date, reason: req.body.reason})
+    console.log('nice one, you just mutated the state :)')
+  }
+  res.sendStatus(200);
+})
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.

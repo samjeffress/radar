@@ -5,7 +5,7 @@ import {quadrants} from '../../constants';
 
 class Radar extends Component {
   render() {
-    const { items } = this.props;
+    const { items, updateItem } = this.props;
 
     const tools = items.filter(i => i.quadrant === quadrants.TOOLS)
     const techniques = items.filter(i => i.quadrant === quadrants.TECHNIQUES)
@@ -15,14 +15,15 @@ class Radar extends Component {
     return (
       <div className="Radar">
         <h3>Wassup, here are some items...</h3>
-        <Quadrant name='tools' items={items} />
+        <Quadrant name='tools' items={items} updateItem={updateItem} />
       </div>
     );
   }
 }
 
 Radar.propTypes = {
-  items: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired,
+  updateItem: PropTypes.func
 }
 
 export default Radar;
