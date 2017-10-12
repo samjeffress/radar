@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Input } from 'reactstrap';
+import Dropdown from 'react-dropdown'
 import PropTypes from 'prop-types';
 
 class RadarItem extends Component {
@@ -11,6 +13,7 @@ class RadarItem extends Component {
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangeFrom = this.handleChangeFrom.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -20,7 +23,15 @@ class RadarItem extends Component {
     });
   }
 
+  handleChangeFrom(targetName) {
+    return eventWithoutTarget => {
+      eventWithoutTarget.target = { name: targetName, value: eventWithoutTarget.value };
+      this.handleChange(eventWithoutTarget);
+    }
+  }
+
   handleChange(event) {
+    console.log('event', event);
     this.setState({
       [event.target.name]: event.target.value
     })
@@ -34,6 +45,13 @@ class RadarItem extends Component {
   render() {
     const { id, name, quadrant, ring, updateItem } = this.props;
 
+    const ringOptions = [
+      { value: 'betthefarm', label: 'betthefarm' },
+      { value: 'adopt', label: 'adopt' },
+      { value: 'hold', label: 'hold' },
+      { value: 'bin', label: 'bin' }
+    ];
+
     return (
       <div className="RadarItem">
         <h3>{name}</h3>
@@ -42,7 +60,12 @@ class RadarItem extends Component {
         <form onSubmit={this.handleSubmit}>
           <label>
             Ring: 
-            <input type="text" name="newRing" value={this.state.newRing} onChange={this.handleChange} />
+            <Dropdown 
+              options={ringOptions} 
+              onChange={this.handleChangeFrom('newRing')} 
+              value={this.state.newRing} 
+              placeholder="Select an option" 
+            />
           </label>
           <label>
             Reason: 

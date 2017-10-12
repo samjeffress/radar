@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.0.0-beta",    
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-dropdown": "^1.3.2",
     "react-easy-chart": "^0.3.0",
     "react-scripts": "1.0.14",
     "react-transition-group": "^2.2.1",
