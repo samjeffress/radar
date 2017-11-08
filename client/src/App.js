@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { observer } from 'mobx-react';
 import Radar from './components/Radar';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+@observer class App extends Component {
   state = { 
     radar: []
   };
