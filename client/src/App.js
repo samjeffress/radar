@@ -30,6 +30,14 @@ class App extends Component {
     this.getCurrentRadar();
   }
 
+  // componentWillMount() {
+  //   this.store = new TweetStore(this.props.config); //create a new instance of the store by passingin the Firebase config
+  // }
+
+  addThing() {
+    store.fb.child(collectionPath).push({hello: 'from ui'});
+  }
+
   getCurrentRadar = () => {
     // Get the passwords and store them in state
     fetch('/api/radar')
@@ -71,7 +79,8 @@ class App extends Component {
           {!messages && <p>waiting for messages</p>}
           {messages && JSON.stringify(messages, null, 2)}
         </div>
-        
+        <div><button onClick={() => this.addThing()}>cats</button>
+        </div>
         {radar.length ? <Radar items={radar} updateItem={this.updateItem} /> : <p>probably should add some data</p>}
       </div>
     );
