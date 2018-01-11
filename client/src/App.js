@@ -5,6 +5,8 @@ import {createAutoSubscriber} from 'firebase-nest';
 import firebase from 'firebase';
 
 import Radar from './components/Radar';
+import Add from './components/RadarItem/Add';
+import Login from './components/Login';
 import logo from './logo.svg';
 import './App.css';
 
@@ -18,31 +20,80 @@ const fbApp = firebase.initializeApp({
   storageBucket: 'tech-radar-b0653.firebaseio.com'
 }, "techRadar");
  
+
+const twitterAuthProvider = new firebase.auth.TwitterAuthProvider(); 
 const store = new MobxFirebaseStore(firebase.database(fbApp).ref());
 
-
 class App extends Component {
-  state = { 
-    radar: []
-  };
-
-  componentDidMount() {
-    this.getCurrentRadar();
+  constructor(props) {
+    super(props);
+    this.state = { 
+      radar: [], 
+      showAdd: false,
+      loggedIn: false,
+      showLoginForm: false
+    };
+    this.addThing = this.addThing.bind(this);
+    this.loginFirebase = this.loginFirebase.bind(this);
+    this.login = this.login.bind(this);
   }
 
   // componentWillMount() {
   //   this.store = new TweetStore(this.props.config); //create a new instance of the store by passingin the Firebase config
   // }
 
-  addThing() {
-    store.fb.child(collectionPath).push({hello: 'from ui'});
+  loginFirebase(username, password) {
+    this.login(username, password);
   }
 
-  getCurrentRadar = () => {
-    // Get the passwords and store them in state
-    fetch('/api/radar')
-      .then(res => res.json())
-      .then(radar => this.setState({ radar }));
+  addThing(thingToBeAdded) {
+    var o = {
+      [thingToBeAdded.name]: {
+        name: thingToBeAdded.name, 
+        quadrant: thingToBeAdded.quadrant,
+        history: [{
+          ring: thingToBeAdded.ring,
+          reason: thingToBeAdded.reason,
+          date: new Date().toISOString()
+        }]
+      }
+    }
+    store.fb.child(collectionPath).update(o);
+    if (this.state.showAdd)
+      this.hideNew();
+  }
+
+  addNew() {
+    this.setState({showAdd: true});
+  }
+
+  hideNew() {
+    this.setState({showAdd: false});
+  }
+
+  login(username, password) {
+    // fbApp.auth().signInWithPopup(twitterAuthProvider).then(function(result) {
+    fbApp.auth().signInWithEmailAndPassword(username, password).then(function(result) {
+      console.log('winning', result)
+      // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
+      // You can use these server side with your app's credentials to access the Twitter API.
+      // var token = result.credential.accessToken;
+      // var secret = result.credential.secret;
+      // // The signed-in user info.
+      // var user = result.user;
+      this.setState({loggedIn: true, showLoginForm: false});
+      // ...
+    }).catch(function(error) {
+      console.log('failing', error)
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
   }
 
   updateItem = (itemId, ring, date, reason) => {
@@ -63,8 +114,12 @@ class App extends Component {
     
     //autoSubscriber keeps track of loading and error status when using store.subscribeSubsWithPromise 
     const { _autoSubscriberFetching: fetching, _autoSubscriberError: fetchError, error } = this.state
-
-    const { radar } = this.state;
+    const radar = messages ? messages.values().map(m => {
+      const m2 = {...m};
+      // history is a mobx observable - we just want a normal array
+      m2.history = m.history ? m.history.slice() : [];
+      return m2;
+    }) : []; //array
 
     return (
       <div className="App">
@@ -79,7 +134,17 @@ class App extends Component {
           {!messages && <p>waiting for messages</p>}
           {messages && JSON.stringify(messages, null, 2)}
         </div>
-        <div><button onClick={() => this.addThing()}>cats</button>
+        <div>
+          <button onClick={() => this.addThing({hello: 'from ui'})}>cats</button>
+        </div>
+        <div>
+          {!this.state.loggedIn && !this.state.showLoginForm && <button onClick={() => this.setState({showLoginForm: true})}>login</button>}
+          {!this.state.loggedIn && this.state.showLoginForm && <Login loginFirebase={this.loginFirebase} />}
+        </div>
+        <div>
+          <button onClick={() => this.addNew()}>add</button>
+          <p>Need a new component for adding new item</p>
+          {this.state && this.state.showAdd && <Add adderOfThings={this.addThing}/>}
         </div>
         {radar.length ? <Radar items={radar} updateItem={this.updateItem} /> : <p>probably should add some data</p>}
       </div>

@@ -26,18 +26,6 @@ app.get('/api/radar', (req, res) => {
   res.json(initialRadar);
 });
 
-app.put('/api/radar/:id', (req, res) => {
-  const id = req.params.id;
-  console.log('body', req.body)
-  const foundRadar = initialRadar.filter(r => r.id == id)
-  console.log('foundRadar', foundRadar)
-  if (foundRadar.length > 0) {
-    foundRadar[0].positions.push({ring: req.body.ring, date: req.body.date, reason: req.body.reason})
-    console.log('nice one, you just mutated the state :)')
-  }
-  res.sendStatus(200);
-})
-
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
