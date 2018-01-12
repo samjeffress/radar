@@ -23,6 +23,9 @@ const fbApp = firebase.initializeApp({
 
 const twitterAuthProvider = new firebase.auth.TwitterAuthProvider(); 
 const store = new MobxFirebaseStore(firebase.database(fbApp).ref());
+const randomBetween = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
 
 class App extends Component {
   constructor(props) {
@@ -51,6 +54,8 @@ class App extends Component {
       [thingToBeAdded.name]: {
         name: thingToBeAdded.name, 
         quadrant: thingToBeAdded.quadrant,
+        x: randomBetween(0, 80), 
+        y: randomBetween(0, 80),
         history: [{
           ring: thingToBeAdded.ring,
           reason: thingToBeAdded.reason,
@@ -119,7 +124,7 @@ class App extends Component {
       // history is a mobx observable - we just want a normal array
       m2.history = m.history ? m.history.slice() : [];
       return m2;
-    }) : []; //array
+    }) : []; 
 
     return (
       <div className="App">
@@ -132,10 +137,6 @@ class App extends Component {
         </p>
         <div>
           {!messages && <p>waiting for messages</p>}
-          {messages && JSON.stringify(messages, null, 2)}
-        </div>
-        <div>
-          <button onClick={() => this.addThing({hello: 'from ui'})}>cats</button>
         </div>
         <div>
           {!this.state.loggedIn && !this.state.showLoginForm && <button onClick={() => this.setState({showLoginForm: true})}>login</button>}
