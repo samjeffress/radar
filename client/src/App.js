@@ -3,6 +3,7 @@ import MobxFirebaseStore from 'mobx-firebase-store';
 import { observer } from 'mobx-react';
 import {createAutoSubscriber} from 'firebase-nest';
 import firebase from 'firebase';
+import { Container, Row, Col } from 'reactstrap';
 
 import Radar from './components/Radar';
 import Add from './components/RadarItem/Add';
@@ -50,6 +51,7 @@ class App extends Component {
   }
 
   addThing(thingToBeAdded) {
+    debugger;
     var o = {
       [thingToBeAdded.name]: {
         name: thingToBeAdded.name, 
@@ -130,11 +132,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>your Radar</code> and save to reload.
-        </p>
         <div>
           {!messages && <p>waiting for messages</p>}
         </div>
@@ -144,10 +142,17 @@ class App extends Component {
         </div>
         <div>
           <button onClick={() => this.addNew()}>add</button>
-          <p>Need a new component for adding new item</p>
-          {this.state && this.state.showAdd && <Add adderOfThings={this.addThing}/>}
+          {this.state && this.state.showAdd && 
+            <Container>
+              <Row>
+                <Col sm={{ size: 6, offset: 3 }}>
+                  <Add adderOfThings={this.addThing}/>
+                </Col>
+              </Row>
+            </Container>
+          }
         </div>
-        {radar.length ? <Radar items={radar} updateItem={this.updateItem} /> : <p>probably should add some data</p>}
+        {radar.length && <Radar items={radar} updateItem={this.updateItem} />}
       </div>
     );
   }

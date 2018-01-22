@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input } from 'reactstrap';
+import { Col, Button, Form, FormGroup, Label, Input, Select } from 'reactstrap';
 import Dropdown from 'react-dropdown'
 import PropTypes from 'prop-types';
 import {quadrants} from '../../constants';
@@ -14,19 +14,10 @@ class Add extends Component {
       reason: ''
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleChangeFrom = this.handleChangeFrom.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChangeFrom(targetName) {
-    return eventWithoutTarget => {
-      eventWithoutTarget.target = { name: targetName, value: eventWithoutTarget.value };
-      this.handleChange(eventWithoutTarget);
-    }
-  }
-
   handleChange(event) {
-    console.log('event', event);
     this.setState({
       [event.target.name]: event.target.value
     })
@@ -45,51 +36,61 @@ class Add extends Component {
   render() {
     const { id, name, quadrant, ring, updateItem } = this.props;
 
-    const ringOptions = [
-      { value: 'betthefarm', label: 'betthefarm' },
-      { value: 'adopt', label: 'adopt' },
-      { value: 'hold', label: 'hold' },
-      { value: 'bin', label: 'bin' }
-    ];
-
-    const quadrantOptions = [
-      { value: quadrants.TOOLS, label: quadrants.TOOLS },
-      { value: quadrants.TECHNIQUES, label: quadrants.TECHNIQUES },
-      { value: quadrants.PLATFORMS, label: quadrants.PLATFORMS },
-      { value: quadrants.LANGUAGES, label: quadrants.LANGUAGES }
-    ];
-
     return (
       <div className="RadarItem">
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
-          </label>
-          <label>
-            Quadrant:
-            <Dropdown 
-              options={quadrantOptions} 
-              onChange={this.handleChangeFrom('quadrant')} 
-              value={this.state.quadrant} 
-              placeholder="Select an option" 
-            />
-          </label>
-          <label>
-            Ring: 
-            <Dropdown 
-              options={ringOptions} 
-              onChange={this.handleChangeFrom('ring')} 
-              value={this.state.ring} 
-              placeholder="Select an option" 
-            />
-          </label>
-          <label>
-            Reason: 
-            <input type="text" name="reason" value={this.state.reason} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
+        <Form outline onSubmit={this.handleSubmit}>
+          <FormGroup row>
+            <Label  sm={2} for="name">Name</Label>
+            <Col sm={10}>          
+              <Input type="text" name="name" id="name" value={this.state.name} onChange={this.handleChange} />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+          <Label  sm={2} for="quadrant">Quadrant</Label>
+            <Col sm={10}>          
+              <Input 
+                id="quadrant"
+                name="quadrant"
+                type="select"
+                onChange={this.handleChange} 
+                value={this.state.quadrant} 
+              >
+                <option></option>
+                <option>{quadrants.TOOLS}</option>
+                <option>{quadrants.TECHNIQUES}</option>
+                <option>{quadrants.PLATFORMS}</option>
+                <option>{quadrants.LANGUAGES}</option>
+              </Input>
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+          <Label  sm={2} for="ring">Ring</Label>
+            <Col sm={10}>          
+              <Input 
+                id="ring"
+                name="ring"
+                type="select"
+                onChange={this.handleChange} 
+                value={this.state.ring} 
+              >
+                <option></option>
+                <option>betthefarm</option>
+                <option>adopt</option>
+                <option>hold</option>
+                <option>bin</option>
+              </Input>
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label  sm={2} for="reason">Reason</Label>
+            <Col sm={10}>          
+              <Input type="text" name="reason" id="reason" value={this.state.reason} onChange={this.handleChange} />
+            </Col>
+          </FormGroup>
+          <FormGroup>
+            <Button color="primary" onClick={this.handleSubmit}>Submit</Button>
+          </FormGroup>
+        </Form>
       </div>
     );
   }
