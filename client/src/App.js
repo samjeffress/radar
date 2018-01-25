@@ -3,7 +3,7 @@ import MobxFirebaseStore from 'mobx-firebase-store';
 import { observer } from 'mobx-react';
 import {createAutoSubscriber} from 'firebase-nest';
 import firebase from 'firebase';
-import { Container, Row, Col } from 'reactstrap';
+import { Button, Container, Nav, Navbar, NavbarBrand, NavItem, Row, Col } from 'reactstrap';
 
 import Radar from './components/Radar';
 import Add from './components/RadarItem/Add';
@@ -38,6 +38,7 @@ class App extends Component {
       showLoginForm: false
     };
     this.addThing = this.addThing.bind(this);
+    this.cancelAdd = this.cancelAdd.bind(this);
     this.loginFirebase = this.loginFirebase.bind(this);
     this.login = this.login.bind(this);
   }
@@ -50,8 +51,12 @@ class App extends Component {
     this.login(username, password);
   }
 
+  cancelAdd() {
+    if (this.state.showAdd)
+      this.hideNew();
+  }
+
   addThing(thingToBeAdded) {
-    debugger;
     var o = {
       [thingToBeAdded.name]: {
         name: thingToBeAdded.name, 
@@ -133,20 +138,29 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
+        <Navbar color="faded" light expand="md">
+          <NavbarBrand href="/">reactstrap</NavbarBrand>
+          <Nav pills>
+            <NavItem>            
+              <Button color="primary" onClick={() => this.addNew()}>Add Item</Button>
+            </NavItem>
+            <NavItem>
+              {!this.state.loggedIn && !this.state.showLoginForm && <Button color="primary" onClick={() => this.setState({showLoginForm: true})}>login</Button>}
+            </NavItem>
+          </Nav>
+        </Navbar>
         <div>
           {!messages && <p>waiting for messages</p>}
         </div>
-        <div>
-          {!this.state.loggedIn && !this.state.showLoginForm && <button onClick={() => this.setState({showLoginForm: true})}>login</button>}
+        <div>          
           {!this.state.loggedIn && this.state.showLoginForm && <Login loginFirebase={this.loginFirebase} />}
         </div>
         <div>
-          <button onClick={() => this.addNew()}>add</button>
           {this.state && this.state.showAdd && 
             <Container>
               <Row>
-                <Col sm={{ size: 6, offset: 3 }}>
-                  <Add adderOfThings={this.addThing}/>
+                <Col className='col-sm-offset-3' sm={{ size: 6, offset: 3 }}>
+                  <Add cancelAdd={this.cancelAdd} adderOfThings={this.addThing}/>
                 </Col>
               </Row>
             </Container>
