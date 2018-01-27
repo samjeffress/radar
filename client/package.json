@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.0.0",
     "custom-react-scripts": "^0.2.1",
     "d3": "^3.5.17",
     "d3-array": "^1.2.1",
@@ -22,7 +22,7 @@
     "react-easy-chart": "^0.3.0",
     "react-faux-dom": "^4.1.0",
     "react-transition-group": "^2.2.1",
-    "reactstrap": "^5.0.0-alpha.3"
+    "reactstrap": "^5.0.0-alpha.4"
   },
   "scripts": {
     "start": "react-scripts start",

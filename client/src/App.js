@@ -60,6 +60,7 @@ class App extends Component {
     var o = {
       [thingToBeAdded.name]: {
         name: thingToBeAdded.name, 
+        description: thingToBeAdded.description,
         quadrant: thingToBeAdded.quadrant,
         x: randomBetween(0, 80), 
         y: randomBetween(0, 80),

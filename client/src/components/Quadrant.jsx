@@ -1,12 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ScatterplotChart } from 'react-easy-chart';
-import { Table, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
+
 import RadarItem from './RadarItem';
 import {quadrants} from '../constants';
 
 // Date.parse is baaad mmkay
 const byMostRecentDate = (historyA, historyB) => (Date.parse(historyA.date) > Date.parse(historyB.date));
+const ringSort = (itemA, itemB) => (itemA.ring > itemB.ring);
+
+const flattenItem = (item) => {
+  const itemFlat = {...item};
+  itemFlat.history.sort(byMostRecentDate);
+  itemFlat.ring = itemFlat.history.length ? itemFlat.history[0].ring : 'bin';
+  itemFlat.updatedAt = itemFlat.history.length ? itemFlat.history[0].date : '';
+  return itemFlat;
+}
 
 class Quadrant extends Component {
   constructor(props) {
@@ -15,31 +25,21 @@ class Quadrant extends Component {
 
   render() {
     const { name, items, updateItem } = this.props;
+    const flattenedSortedItems = items.map(flattenItem).sort(ringSort);
     return (
       <div className={`Quadrant${name}`}>
         <h3>{name}</h3>
+        {flattenedSortedItems.map(item => { return(
 
-        <Table responsive bordered>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Ring</th>
-              <th>Updated At</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map(item => {
-              const mostRecentHistory = item.history.sort(byMostRecentDate);
-              return (
-              <tr>
-                <td>{item.name}</td>
-                <td>{mostRecentHistory.length > 0 && mostRecentHistory[0].ring}</td>
-                <td>{mostRecentHistory.length > 0 && mostRecentHistory[0].date}</td>
-              </tr>
-              )
-            })}
-          </tbody>
-        </Table>
+          <Card key={`${item.name}-${item.ring}`} body className="text-left">
+            <CardBody>
+              <CardTitle>{item.name}</CardTitle>
+              <CardSubtitle>{item.ring}. Updated at {item.updatedAt}</CardSubtitle>
+              <CardText>{item.description}</CardText>
+            </CardBody>
+          </Card>
+
+        )})}
       </div>
     );
   }

@@ -9,6 +9,7 @@ class Add extends Component {
     super(props);
     this.state = { 
       name: '',
+      description: '', 
       ring: '',
       quadrant: '',
       reason: ''
@@ -26,6 +27,7 @@ class Add extends Component {
   handleSubmit(event) {
     this.props.adderOfThings({
       name: this.state.name, 
+      description: this.state.description,
       ring: this.state.ring, 
       quadrant: this.state.quadrant,
       reason: this.state.reason
@@ -34,7 +36,7 @@ class Add extends Component {
   }
 
   render() {
-    const { id, name, quadrant, ring, updateItem } = this.props;
+    const { id, name, description, quadrant, ring, updateItem } = this.props;
 
     return (
       <div className="RadarItem">
@@ -43,6 +45,12 @@ class Add extends Component {
             <Label  sm={2} for="name">Name</Label>
             <Col sm={10}>          
               <Input type="text" name="name" id="name" value={this.state.name} onChange={this.handleChange} />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label  sm={2} for="description">Description</Label>
+            <Col sm={10}>          
+              <Input type="text" name="description" id="description" value={this.state.description} onChange={this.handleChange} />
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -99,6 +107,7 @@ class Add extends Component {
 
 Add.propTypes = {
   name: PropTypes.string,
+  description: PropTypes.string,
   quadrant: PropTypes.string,
   ring: PropTypes.string,
   reason: PropTypes.string,
