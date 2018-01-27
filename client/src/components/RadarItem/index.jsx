@@ -14,7 +14,6 @@ class RadarItem extends Component {
     };
     this.toggle = this.toggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleChangeFrom = this.handleChangeFrom.bind(this);
     this.handleChangeFromTarget = this.handleChangeFromTarget.bind(this);
     this.handleSelectEventFrom = this.handleSelectEventFrom.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,13 +29,6 @@ class RadarItem extends Component {
     return eventWithTarget => {
       eventWithTarget.target.name = targetName;
       this.handleChange(eventWithTarget);
-    }
-  }
-
-  handleChangeFrom(targetName) {
-    return eventWithoutTarget => {
-      eventWithoutTarget.target = { name: targetName, value: eventWithoutTarget.value };
-      this.handleChange(eventWithoutTarget);
     }
   }
 

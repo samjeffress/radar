@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScatterplotChart } from 'react-easy-chart';
-import { Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
-
-import RadarItem from './RadarItem';
+import ItemView from './RadarItem/View';
 import {quadrants} from '../constants';
 
 // Date.parse is baaad mmkay
-const byMostRecentDate = (historyA, historyB) => (Date.parse(historyA.date) > Date.parse(historyB.date));
+const byMostRecentDate = (historyA, historyB) => (Date.parse(historyA.date) < Date.parse(historyB.date));
 const ringSort = (itemA, itemB) => (itemA.ring > itemB.ring);
 
 const flattenItem = (item) => {
@@ -30,15 +27,7 @@ class Quadrant extends Component {
       <div className={`Quadrant${name}`}>
         <h3>{name}</h3>
         {flattenedSortedItems.map(item => { return(
-
-          <Card key={`${item.name}-${item.ring}`} body className="text-left">
-            <CardBody>
-              <CardTitle>{item.name}</CardTitle>
-              <CardSubtitle>{item.ring}. Updated at {item.updatedAt}</CardSubtitle>
-              <CardText>{item.description}</CardText>
-            </CardBody>
-          </Card>
-
+          <ItemView updateItem={this.props.updateItem} item={item} key={`${item.name}-${item.ring}`} />
         )})}
       </div>
     );

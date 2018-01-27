@@ -3,6 +3,7 @@ import MobxFirebaseStore from 'mobx-firebase-store';
 import { observer } from 'mobx-react';
 import {createAutoSubscriber} from 'firebase-nest';
 import firebase from 'firebase';
+import { toJS } from 'mobx';
 import { Button, Container, Nav, Navbar, NavbarBrand, NavItem, Row, Col } from 'reactstrap';
 
 import Radar from './components/Radar';
@@ -38,6 +39,7 @@ class App extends Component {
       showLoginForm: false
     };
     this.addThing = this.addThing.bind(this);
+    this.addHistoryToThing = this.addHistoryToThing.bind(this);
     this.cancelAdd = this.cancelAdd.bind(this);
     this.loginFirebase = this.loginFirebase.bind(this);
     this.login = this.login.bind(this);
@@ -54,6 +56,15 @@ class App extends Component {
   cancelAdd() {
     if (this.state.showAdd)
       this.hideNew();
+  }
+
+  addHistoryToThing(thingKey, ring, reason) {
+    const history = {
+      ring: ring,
+      reason: reason,
+      date: new Date().toISOString()
+    };
+    store.fb.child(`${collectionPath}/${thingKey}/history`).push(history);
   }
 
   addThing(thingToBeAdded) {
@@ -130,7 +141,12 @@ class App extends Component {
     const radar = messages ? messages.values().map(m => {
       const m2 = {...m};
       // history is a mobx observable - we just want a normal array
-      m2.history = m.history ? m.history.slice() : [];
+      if (m.history) {
+        const h = toJS(m.history);
+        m2.history = Object.keys(h).map(k => h[k]);
+      } else {
+        m2.history = [];
+      }
       return m2;
     }) : []; 
 
@@ -167,7 +183,7 @@ class App extends Component {
             </Container>
           }
         </div>
-        {radar.length && <Radar items={radar} updateItem={this.updateItem} />}
+        {radar.length && <Radar items={radar} updateItem={this.addHistoryToThing} />}
       </div>
     );
   }
