@@ -32,7 +32,8 @@ class ItemView extends Component {
           <CardSubtitle>{item.ring}. Updated at {item.updatedAt}</CardSubtitle>
           <CardText>{item.description}</CardText>
           {!this.state.showAddRevision && <Button onClick={() => this.toggleUpdate()}>Update</Button>}
-          {this.state.showAddRevision && <AddRevision name={item.name} updateItem={this.props.updateItem} />}
+          {this.state.showAddRevision && <AddRevision name={item.name} cancelAdd={this.toggleUpdate} updateItem={this.props.updateItem} />}
+          {' '}
           <Button onClick={() => this.toggleHistory()}>{this.state.showHistory ? 'Hide' : 'Show'} History</Button>
         </CardBody>
         <Collapse isOpen={this.state.showHistory}>

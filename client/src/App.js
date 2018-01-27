@@ -155,35 +155,42 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
-        <Navbar color="faded" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <Nav pills>
-            <NavItem>            
-              <Button color="primary" onClick={() => this.addNew()}>Add Item</Button>
-            </NavItem>
-            <NavItem>
-              {!this.state.loggedIn && !this.state.showLoginForm && <Button color="primary" onClick={() => this.setState({showLoginForm: true})}>login</Button>}
-            </NavItem>
-          </Nav>
-        </Navbar>
-        <div>
-          {!messages && <p>waiting for messages</p>}
-        </div>
-        <div>          
-          {!this.state.loggedIn && this.state.showLoginForm && <Login loginFirebase={this.loginFirebase} />}
-        </div>
-        <div>
-          {this.state && this.state.showAdd && 
-            <Container>
+        <Container>
+
+          <Row>
+            <Col className='col-sm-offset-3' sm={{ size: 6, offset: 3 }}>
+              <Navbar color="faded" light expand="md">
+                <NavbarBrand href="/">reactstrap</NavbarBrand>
+                <Nav pills>
+                  <NavItem>            
+                    <Button color="primary" onClick={() => this.addNew()}>Add Item</Button>{' '}
+                  </NavItem>
+                  <NavItem>
+                    {' '}{!this.state.loggedIn && !this.state.showLoginForm && <Button color="primary" onClick={() => this.setState({showLoginForm: true})}>login</Button>}
+                  </NavItem>
+                </Nav>
+              </Navbar>
+            </Col>
+          </Row>
+          <div>
+            {!messages && <p>waiting for messages</p>}
+          </div>
+          <div>          
+            {!this.state.loggedIn && this.state.showLoginForm && <Login loginFirebase={this.loginFirebase} />}
+          </div>
+          <div>
+            {this.state && this.state.showAdd && 
+              
               <Row>
                 <Col className='col-sm-offset-3' sm={{ size: 6, offset: 3 }}>
                   <Add cancelAdd={this.cancelAdd} adderOfThings={this.addThing}/>
                 </Col>
               </Row>
-            </Container>
-          }
-        </div>
-        {radar.length && <Radar items={radar} updateItem={this.addHistoryToThing} />}
+            }
+          </div>
+          {radar.length && <Radar items={radar} updateItem={this.addHistoryToThing} />}
+
+        </Container>
       </div>
     );
   }

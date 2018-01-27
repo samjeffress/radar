@@ -58,7 +58,7 @@ class RadarItem extends Component {
             </Col>
           </FormGroup>
           <FormGroup>
-            <Button color="primary" onClick={this.handleSubmit}>Submit</Button>
+            <Button color="primary" onClick={this.handleSubmit}>Submit</Button>{' '}
             <Button color="warning" onClick={this.props.cancelAdd}>Cancel</Button>
           </FormGroup>
         </Form>
