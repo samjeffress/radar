@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardBody, CardTitle, CardSubtitle, CardText, Collapse, Table } from 'reactstrap';
+import moment from 'moment';
 import AddRevision from './AddRevision';
 
 class ItemView extends Component {
@@ -42,7 +43,7 @@ class ItemView extends Component {
                   <tr>
                     <td>{h.ring}</td>
                     <td>{h.reason}</td>
-                    <td>{h.date}</td>
+                    <td>{moment(h.date).fromNow()}</td>
                   </tr>
                 )
               })}
