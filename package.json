@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.1"
+    "bootstrap": "^4.0.0-alpha.6",
+    "express": "^4.16.1",
+    "reactstrap": "^4.8.0"
   }
 }
