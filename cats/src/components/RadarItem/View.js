@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardBody, CardTitle, CardSubtitle, CardText, Collapse, Table } from 'reactstrap';
+import { Card, CardBody, CardTitle, CardSubtitle, CardText, Collapse, Table } from 'reactstrap';
+import Button from 'material-ui/Button';
+import ExpansionPanel, {
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+} from 'material-ui/ExpansionPanel';
 import moment from 'moment';
 import AddRevision from './AddRevision';
 
@@ -36,21 +41,23 @@ class ItemView extends Component {
           {' '}
           <Button onClick={() => this.toggleHistory()}>{this.state.showHistory ? 'Hide' : 'Show'} History</Button>
         </CardBody>
-        <Collapse isOpen={this.state.showHistory}>
-          <Table>
-            <tbody>
-              {item.history.map(h => {
-                return (
-                  <tr>
-                    <td>{h.ring}</td>
-                    <td>{h.reason}</td>
-                    <td>{moment(h.date).fromNow()}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </Table>
-        </Collapse>
+        <ExpansionPanel expanded={this.state.showHistory}>
+          <ExpansionPanelDetails>
+            <Table>
+              <tbody>
+                {item.history.map((h, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{h.ring}</td>
+                      <td>{h.reason}</td>
+                      <td>{moment(h.date).fromNow()}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </Table>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
       </Card>
     );
