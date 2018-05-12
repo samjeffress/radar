@@ -30,22 +30,22 @@ class Radar extends Component {
     return (
       <Grid container spacing={24}>
         <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} elevation={0}>
             <Quadrant name='tools' items={tools} updateItem={updateItem} />
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} elevation={0}>
             <Quadrant name='techniques' items={techniques} updateItem={updateItem} />
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} elevation={0}>
             <Quadrant name='platforms' items={platforms} updateItem={updateItem} />
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} elevation={0}>
             <Quadrant name='languages' items={languages} updateItem={updateItem} />
           </Paper>
         </Grid>

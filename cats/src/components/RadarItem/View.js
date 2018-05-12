@@ -52,10 +52,10 @@ class ItemView extends Component {
           <Typography variant="headline" component="h2">{item.name}</Typography>
           <Typography color="textSecondary">{item.ring}. Updated at {item.updatedAt}</Typography>
           <Typography component="p">{item.description}</Typography>
-          {!this.state.showAddRevision && <Button onClick={() => this.toggleUpdate()}>Update</Button>}
+          {!this.state.showAddRevision && <Button color="primary"onClick={() => this.toggleUpdate()}>Update</Button>}
           {this.state.showAddRevision && <AddRevision name={item.name} cancelAdd={this.toggleUpdate} updateItem={this.props.updateItem} />}
           {' '}
-          <Button onClick={() => this.toggleHistory()}>{this.state.showHistory ? 'Hide' : 'Show'} History</Button>
+          <Button color="secondary" onClick={() => this.toggleHistory()}>{this.state.showHistory ? 'Hide' : 'Show'} History</Button>
           <ExpansionPanel expanded={this.state.showHistory}>
             <ExpansionPanelDetails>
               <Table>
