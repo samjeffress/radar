@@ -1,13 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardBody, CardTitle, CardSubtitle, CardText, Collapse, Table } from 'reactstrap';
-import Button from 'material-ui/Button';
 import ExpansionPanel, {
   ExpansionPanelDetails,
   ExpansionPanelSummary,
 } from 'material-ui/ExpansionPanel';
 import moment from 'moment';
+import { withStyles } from 'material-ui/styles';
+import Card, { CardContent } from 'material-ui/Card';
+import Button from 'material-ui/Button';
+import Typography from 'material-ui/Typography';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+
 import AddRevision from './AddRevision';
+
+const styles = {
+  card: {
+    minWidth: 275,
+    marginBottom: 20,
+    textAlign: 'left'
+  },
+  title: {
+    marginBottom: 16,
+    fontSize: 14,
+  }
+};
 
 class ItemView extends Component {
   constructor(props) {
@@ -29,36 +45,35 @@ class ItemView extends Component {
   }
 
   render() {
-    const { item, addRevision } = this.props;
+    const { item, addRevision, classes } = this.props;
     return (
-      <Card key={`${item.name}-${item.ring}`} body className="text-left">
-        <CardBody>
-          <CardTitle>{item.name}</CardTitle>
-          <CardSubtitle>{item.ring}. Updated at {item.updatedAt}</CardSubtitle>
-          <CardText>{item.description}</CardText>
+      <Card key={`${item.name}-${item.ring}`} className={classes.card}>
+        <CardContent>
+          <Typography variant="headline" component="h2">{item.name}</Typography>
+          <Typography color="textSecondary">{item.ring}. Updated at {item.updatedAt}</Typography>
+          <Typography component="p">{item.description}</Typography>
           {!this.state.showAddRevision && <Button onClick={() => this.toggleUpdate()}>Update</Button>}
           {this.state.showAddRevision && <AddRevision name={item.name} cancelAdd={this.toggleUpdate} updateItem={this.props.updateItem} />}
           {' '}
           <Button onClick={() => this.toggleHistory()}>{this.state.showHistory ? 'Hide' : 'Show'} History</Button>
-        </CardBody>
-        <ExpansionPanel expanded={this.state.showHistory}>
-          <ExpansionPanelDetails>
-            <Table>
-              <tbody>
-                {item.history.map((h, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{h.ring}</td>
-                      <td>{h.reason}</td>
-                      <td>{moment(h.date).fromNow()}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </Table>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-
+          <ExpansionPanel expanded={this.state.showHistory}>
+            <ExpansionPanelDetails>
+              <Table>
+                <TableBody>
+                  {item.history.map((h, index) => {
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>{h.ring}</TableCell>
+                        <TableCell>{h.reason}</TableCell>
+                        <TableCell>{moment(h.date).fromNow()}</TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </CardContent>
       </Card>
     );
   }
@@ -68,6 +83,5 @@ ItemView.propTypes = {
   item: PropTypes.object,
   addRevision: PropTypes.func
 }
-
-export default ItemView;
+export default withStyles(styles)(ItemView);
 
