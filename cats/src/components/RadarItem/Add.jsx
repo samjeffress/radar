@@ -1,8 +1,25 @@
 import React, { Component } from 'react';
-import { Col, Button, Form, FormGroup, Label, Input, Select } from 'reactstrap';
-import Dropdown from 'react-dropdown'
 import PropTypes from 'prop-types';
 import {quadrants} from '../../constants';
+import TextField from 'material-ui/TextField';
+import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import MenuItem from 'material-ui/Menu/MenuItem';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 200,
+  },
+});
 
 class Add extends Component {
   constructor(props) {
@@ -36,70 +53,101 @@ class Add extends Component {
   }
 
   render() {
-    const { id, name, description, quadrant, ring, updateItem } = this.props;
+    const { id, name, description, quadrant, ring, updateItem, classes } = this.props;
 
     return (
       <div className="RadarItem">
-        <Form outline onSubmit={this.handleSubmit}>
-          <FormGroup row>
-            <Label  sm={2} for="name">Name</Label>
-            <Col sm={10}>          
-              <Input type="text" name="name" id="name" value={this.state.name} onChange={this.handleChange} />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label  sm={2} for="description">Description</Label>
-            <Col sm={10}>          
-              <Input type="text" name="description" id="description" value={this.state.description} onChange={this.handleChange} />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-          <Label  sm={2} for="quadrant">Quadrant</Label>
-            <Col sm={10}>          
-              <Input 
-                id="quadrant"
-                name="quadrant"
-                type="select"
-                onChange={this.handleChange} 
-                value={this.state.quadrant} 
-              >
-                <option></option>
-                <option>{quadrants.TOOLS}</option>
-                <option>{quadrants.TECHNIQUES}</option>
-                <option>{quadrants.PLATFORMS}</option>
-                <option>{quadrants.LANGUAGES}</option>
-              </Input>
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-          <Label  sm={2} for="ring">Ring</Label>
-            <Col sm={10}>          
-              <Input 
-                id="ring"
-                name="ring"
-                type="select"
-                onChange={this.handleChange} 
-                value={this.state.ring} 
-              >
-                <option></option>
-                <option>betthefarm</option>
-                <option>adopt</option>
-                <option>hold</option>
-                <option>bin</option>
-              </Input>
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label  sm={2} for="reason">Reason</Label>
-            <Col sm={10}>          
-              <Input type="text" name="reason" id="reason" value={this.state.reason} onChange={this.handleChange} />
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Button color="primary" onClick={this.handleSubmit}>Submit</Button>
-            <Button color="warning" onClick={this.props.cancelAdd}>Cancel</Button>
-          </FormGroup>
-        </Form>
+        <form onSubmit={this.handleSubmit}>
+          <TextField
+            id="name"
+            name="name"
+            label="Name"
+            className={classes.textField}
+            value={this.state.name}
+            onChange={this.handleChange}
+            margin="normal"
+          />   
+          <TextField
+            id="description"
+            name="description"
+            label="Description"
+            className={classes.textField}
+            value={this.state.description}
+            onChange={this.handleChange}
+            margin="normal"
+          />
+          <TextField
+            id="quadrant"
+            name="quadrant"
+            select
+            label="Quadrant"
+            className={classes.textField}
+            value={this.state.quadrant}
+            onChange={this.handleChange}
+            SelectProps={{
+              MenuProps: {
+                className: classes.menu,
+              },
+            }}
+            helperText="Please select the ring"
+            margin="normal"
+          >
+            {[
+              quadrants.TOOLS,
+              quadrants.TECHNIQUES,
+              quadrants.PLATFORMS,
+              quadrants.LANGUAGES
+            ].map(option => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="ring"
+            name="ring"
+            select
+            label="Ring"
+            className={classes.textField}
+            value={this.state.ring}
+            onChange={this.handleChange}
+            SelectProps={{
+              MenuProps: {
+                className: classes.menu,
+              },
+            }}
+            helperText="Please select the ring"
+            margin="normal"
+          >
+            {[
+              'betthefarm',
+              'adopt',
+              'hold',
+              'bin'
+            ].map(option => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="reason"
+            name="reason"
+            label="Reason"
+            className={classes.textField}
+            value={this.state.reason}
+            onChange={this.handleChange}
+            margin="normal"
+          />   
+          <div>
+            <Button variant="raised" color="primary" onClick={this.handleSubmit} className={classes.button}>
+              Submit
+            </Button>
+            <Button variant="raised" color="secondary" onClick={this.props.cancelAdd} className={classes.button}>
+              Cancel
+            </Button>
+          </div>
+        </form>
       </div>
     );
   }
@@ -114,4 +162,4 @@ Add.propTypes = {
   adderOfThings: PropTypes.func
 }
 
-export default Add;
+export default withStyles(styles)(Add)

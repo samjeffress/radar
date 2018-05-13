@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import {createAutoSubscriber} from 'firebase-nest';
 import firebase from 'firebase';
 import { toJS } from 'mobx';
-import { Container, Nav, Navbar, NavbarBrand, NavItem, Row, Col } from 'reactstrap';
 
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -160,7 +159,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Container>
 
         <AppBar position="static">
           <Toolbar>
@@ -183,17 +181,11 @@ class App extends Component {
           </div>
           <div>
             {this.state && this.state.showAdd && 
-              
-              <Row>
-                <Col className='col-sm-offset-3' sm={{ size: 6, offset: 3 }}>
-                  <Add cancelAdd={this.cancelAdd} adderOfThings={this.addThing}/>
-                </Col>
-              </Row>
+              <Add cancelAdd={this.cancelAdd} adderOfThings={this.addThing}/>
             }
           </div>
           {radar.length && <Radar items={radar} updateItem={this.addHistoryToThing} />}
 
-        </Container>
       </div>
     );
   }

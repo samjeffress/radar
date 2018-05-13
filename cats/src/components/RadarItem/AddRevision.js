@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
-import { Form, FormGroup, Label, Col, Input} from 'reactstrap';
-import Dropdown from 'react-dropdown'
 import PropTypes from 'prop-types';
+import TextField from 'material-ui/TextField';
+import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import MenuItem from 'material-ui/Menu/MenuItem';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 200,
+  },
+});
 
 class RadarItem extends Component {
   constructor(props) {
@@ -15,7 +31,7 @@ class RadarItem extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleChange(event) {s
     this.setState({
       [event.target.name]: event.target.value
     })
@@ -27,41 +43,56 @@ class RadarItem extends Component {
   }
 
   render() {
-    const { name, newRing, newReason } = this.props;
+    const { name, newRing, newReason, classes } = this.props;
 
     return (
       <div className="RadarItem">
-
-        <Form outline onSubmit={this.handleSubmit}>
-          <FormGroup row>
-          <Label  sm={2} for="newRing">Ring</Label>
-            <Col sm={10}>          
-              <Input 
-                id="newRing"
-                name="newRing"
-                type="select"
-                onChange={this.handleChange} 
-                value={this.state.newRing} 
-              >
-                <option></option>
-                <option>betthefarm</option>
-                <option>adopt</option>
-                <option>hold</option>
-                <option>bin</option>
-              </Input>
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label  sm={2} for="newReason">Reason</Label>
-            <Col sm={10}>          
-              <Input type="text" name="newReason" id="newReason" value={this.state.newReason} onChange={this.handleChange} />
-            </Col>
-          </FormGroup>
-          <FormGroup>
-            <Button color="primary" onClick={this.handleSubmit}>Submit</Button>{' '}
-            <Button color="warning" onClick={this.props.cancelAdd}>Cancel</Button>
-          </FormGroup>
-        </Form>
+        <form className={classes.container} onSubmit={this.handleSubmit} noValidate autoComplete="off">
+          <TextField
+            id="newRing"
+            name="newRing"
+            select
+            label="New Ring"
+            className={classes.textField}
+            value={this.state.newRing}
+            onChange={this.handleChange}
+            SelectProps={{
+              MenuProps: {
+                className: classes.menu,
+              },
+            }}
+            helperText="Please select the ring"
+            margin="normal"
+          >
+            {[
+              'betthefarm',
+              'adopt',
+              'hold',
+              'bin'
+            ].map(option => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="newReason"
+            name="newReason"
+            label="Reason"
+            className={classes.textField}
+            value={this.state.newReason}
+            onChange={this.handleChange}
+            margin="normal"
+          />   
+          <div>
+            <Button variant="raised" color="primary" onClick={this.handleSubmit} className={classes.button}>
+              Submit
+            </Button>
+            <Button variant="raised" color="secondary" onClick={this.props.cancelAdd} className={classes.button}>
+              Cancel
+            </Button>
+          </div>
+        </form>
       </div>
     );
   }
@@ -70,5 +101,4 @@ class RadarItem extends Component {
 RadarItem.propTypes = {
   name: PropTypes.string,
 }
-
-export default RadarItem;
+export default withStyles(styles)(RadarItem);

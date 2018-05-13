@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
-import Dropdown from 'react-dropdown'
 import PropTypes from 'prop-types';
 
 class RadarItem extends Component {
